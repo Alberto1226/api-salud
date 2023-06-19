@@ -4,12 +4,12 @@ const categorias = require("../models/categorias");
 
 // Registro de administradores
 router.post("/registro", async (req, res) => {
-    const { titulo } = req.body;
+    const { nombre } = req.body;
 
     // Inicia validacion para no registrar categorias con el mismo nombre
     const busqueda = await categorias.findOne({ nombre });
 
-    if (busqueda && busqueda.titulo === titulo) {
+    if (busqueda && busqueda.nombre === nombre) {
         return res.status(401).json({ mensaje: "Categoria ya registrado" });
     } else {
         const categoriasRegistrar = categorias(req.body);
@@ -139,7 +139,7 @@ router.put("/actualizar/:id", async (req, res) => {
     // Inicia validacion para no registrar categoias con el mismo correo electronico
     const busqueda = await categorias.findOne({ nombre });
 
-    if (busqueda && busqueda.titulo === titulo && busqueda._id != id) {
+    if (busqueda && busqueda.nombre === nombre && busqueda._id != id) {
         return res.status(401).json({ mensaje: "Categoria ya registrada" });
     } else {
         await categorias
