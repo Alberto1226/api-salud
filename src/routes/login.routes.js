@@ -7,8 +7,6 @@ const usuariosModelo = require("../models/usuarios");
 router.post('/login', async (req, res) => {
     const { email, contraseña } = req.body;
 
-    console.log(email, contraseña)
-
     const usuarios = await usuariosModelo.findOne({ email });
 
     if (!usuarios) return res.status(401).json({ mensaje: "Usuario no registrado" });

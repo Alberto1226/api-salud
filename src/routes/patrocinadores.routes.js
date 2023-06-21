@@ -4,12 +4,12 @@ const patrocinadores = require("../models/patrocinadores");
 
 // Registro de administradores
 router.post("/registro", async (req, res) => {
-    const { titulo } = req.body;
+    const { nombre } = req.body;
 
     // Inicia validacion para no registrar patrocinadores con el mismo nombre
     const busqueda = await patrocinadores.findOne({ nombre });
 
-    if (busqueda && busqueda.titulo === titulo) {
+    if (busqueda && busqueda.nombre === nombre) {
         return res.status(401).json({ mensaje: "Patrocinador ya registrado" });
     } else {
         const patrocinadoresRegistrar = patrocinadores(req.body);
@@ -134,16 +134,16 @@ router.put("/deshabilitar/:id", async (req, res) => {
 // Actualizar datos de la patrocinador
 router.put("/actualizar/:id", async (req, res) => {
     const { id } = req.params;
-    const { nombre, descripcion, estado } = req.body;
+    const {  nombre, urlImagen, urlWeb, urlFacebook, urlInstagram, urlTwitter, estado } = req.body;
 
     // Inicia validacion para no registrar categoias con el mismo correo electronico
     const busqueda = await patrocinadores.findOne({ nombre });
 
-    if (busqueda && busqueda.titulo === titulo && busqueda._id != id) {
+    if (busqueda && busqueda.nombre === nombre && busqueda._id != id) {
         return res.status(401).json({ mensaje: "Patrocinador ya registrada" });
     } else {
         await patrocinadores
-            .updateOne({ _id: id }, { $set: { nombre, descripcion, estado } })
+            .updateOne({ _id: id }, { $set: { nombre, urlImagen, urlWeb, urlFacebook, urlInstagram, urlTwitter, estado } })
             .then((data) => res.status(200).json({ mensaje: "Datos del patrocinador actualizados" }))
             .catch((error) => res.json({ message: error }));
     }
