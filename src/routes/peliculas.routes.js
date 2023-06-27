@@ -27,8 +27,9 @@ router.post("/registro", async (req, res) => {
 
 // Obtener todos las peliculas
 router.get("/listar", async (req, res) => {
+    const { tipo } = req.query;
     peliculas
-        .find()
+        .find({ tipo })
         .sort({ _id: -1 })
         .then((data) => res.json(data))
         .catch((error) => res.json({ message: error }));
