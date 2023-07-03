@@ -78,6 +78,7 @@ app.use("/peliculas/", require("./src/routes/peliculas.routes"));
 app.use("/series/", require("./src/routes/series.routes"));
 app.use("/patrocinadores/", require("./src/routes/patrocinadores.routes"));
 app.use("/categorias/", require("./src/routes/categorias.routes"));
+app.use("/capitulosSeries/", require("./src/routes/capitulosSeries.routes"));
 
 app.use(notFound);
 app.use(Sentry.Handlers.errorHandler());
