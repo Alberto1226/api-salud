@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const series = require("../models/series");
+const multer = require("multer");
+const path = require("path");
 
 // Registro de administradores
 router.post("/registro", async (req, res) => {
@@ -147,6 +149,26 @@ router.put("/actualizar/:id", async (req, res) => {
             .then((data) => res.status(200).json({ mensaje: "Datos de la serie actualizados" }))
             .catch((error) => res.json({ message: error }));
     }
+});
+
+const destinationFolder = "/Users/josedavidayalafranco3/Documents/cancun/mi-mexico/src/assets/capitulos";
+
+const upload = multer({
+    dest: destinationFolder,
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, destinationFolder);
+        },
+        filename: (req, file, cb) => {
+            const ext = path.extname(file.originalname);
+            cb(null, `video-${Date.now()}${ext}`);
+        },
+    }),
+});
+
+router.post('/upload', upload.single('video'), (req, res) => {
+    const videoPath = req.file.path;
+    res.json({ videoPath });
 });
 
 module.exports = router;

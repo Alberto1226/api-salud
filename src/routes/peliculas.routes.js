@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const peliculas = require("../models/peliculas");
+const multer = require("multer");
+const path = require("path");
 
 // Registro de administradores
 router.post("/registro", async (req, res) => {
@@ -135,7 +137,7 @@ router.put("/deshabilitar/:id", async (req, res) => {
 // Actualizar datos de la pelicula
 router.put("/actualizar/:id", async (req, res) => {
     const { id } = req.params;
-    const { titulo, genero, actores, director, tipo, datosTemporada, duracion, sinopsis, calificacion, datos, temporada, año, disponibilidad } = req.body;
+    const { titulo, genero, actores, urlVideo, urlPortada, director, tipo, datosTemporada, duracion, sinopsis, calificacion, datos, temporada, año, disponibilidad } = req.body;
 
     // Inicia validacion para no registrar peliculass con el mismo correo electronico
     const busqueda = await peliculas.findOne({ titulo });
@@ -144,10 +146,30 @@ router.put("/actualizar/:id", async (req, res) => {
         return res.status(401).json({ mensaje: "Pelicula ya registrada" });
     } else {
         await peliculas
-            .updateOne({ _id: id }, { $set: { titulo, genero, actores, tipo, datosTemporada, director, duracion, sinopsis, calificacion, datos, temporada, año, disponibilidad } })
+            .updateOne({ _id: id }, { $set: { titulo, genero, actores, tipo, urlVideo, urlPortada, datosTemporada, director, duracion, sinopsis, calificacion, datos, temporada, año, disponibilidad } })
             .then((data) => res.status(200).json({ mensaje: "Datos de la pelicula actualizados" }))
             .catch((error) => res.json({ message: error }));
     }
+});
+
+const destinationFolder = "/Users/josedavidayalafranco3/Documents/cancun/mi-mexico/src/assets/videos";
+
+const upload = multer({
+    dest: destinationFolder,
+    storage: multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, destinationFolder);
+      },
+      filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        cb(null, `video-${Date.now()}${ext}`);
+      },
+    }),
+  });
+
+router.post('/upload', upload.single('video'), (req, res) => {
+    const videoPath = req.file.path;
+    res.json({ videoPath });
 });
 
 module.exports = router;
