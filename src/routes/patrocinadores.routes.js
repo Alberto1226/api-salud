@@ -134,19 +134,12 @@ router.put("/deshabilitar/:id", async (req, res) => {
 // Actualizar datos de la patrocinador
 router.put("/actualizar/:id", async (req, res) => {
     const { id } = req.params;
-    const {  nombre, urlImagen, urlWeb, urlFacebook, urlInstagram, urlTwitter, nivel, estado } = req.body;
+    const { nombre, urlImagen, urlWeb, urlFacebook, urlInstagram, urlTwitter, nivel, estado } = req.body;
 
-    // Inicia validacion para no registrar categoias con el mismo correo electronico
-    const busqueda = await patrocinadores.findOne({ nombre });
-
-    if (busqueda && busqueda.nombre === nombre && busqueda._id != id) {
-        return res.status(401).json({ mensaje: "Patrocinador ya registrada" });
-    } else {
-        await patrocinadores
-            .updateOne({ _id: id }, { $set: { nombre, urlImagen, urlWeb, urlFacebook, urlInstagram, urlTwitter, nivel, estado } })
-            .then((data) => res.status(200).json({ mensaje: "Datos del patrocinador actualizados" }))
-            .catch((error) => res.json({ message: error }));
-    }
+    await patrocinadores
+        .updateOne({ _id: id }, { $set: { nombre, urlImagen, urlWeb, urlFacebook, urlInstagram, urlTwitter, nivel, estado } })
+        .then((data) => res.status(200).json({ mensaje: "Datos del patrocinador actualizados" }))
+        .catch((error) => res.json({ message: error }));
 });
 
 module.exports = router;
