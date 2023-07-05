@@ -12,7 +12,7 @@ router.post("/registro", async (req, res) => {
     const busqueda = await series.findOne({ titulo });
 
     if (busqueda && busqueda.titulo === titulo) {
-        return res.status(401).json({ mensaje: "Serie ya registrado" });
+        return res.status(401).json({ mensaje: "Serie ya registrada" });
     } else {
         const seriesRegistrar = series(req.body);
         await seriesRegistrar

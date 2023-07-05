@@ -12,7 +12,7 @@ router.post("/registro", async (req, res) => {
     const busqueda = await peliculas.findOne({ titulo });
 
     if (busqueda && busqueda.titulo === titulo) {
-        return res.status(401).json({ mensaje: "Pelicula ya registrado" });
+        return res.status(401).json({ mensaje: "Pelicula ya registrada" });
     } else {
         const peliculasRegistrar = peliculas(req.body);
         await peliculasRegistrar
