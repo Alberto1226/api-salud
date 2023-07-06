@@ -13,9 +13,10 @@ const series = new Schema({
     datosTemporada: { type: Array, default: [] },
     año: { type: String },
     disponibilidad: { type: String },
-    masVisto: {type: String},
-    recomendado: {type: String},
-    urlPortada: {type: String},
+    masVisto: { type: String },
+    header: { type: String },
+    recomendado: { type: String },
+    urlPortada: { type: String },
     seccion: { type: String },
     estado: { type: String }
 }, {
