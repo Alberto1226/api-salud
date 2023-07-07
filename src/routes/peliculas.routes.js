@@ -37,6 +37,17 @@ router.get("/listar", async (req, res) => {
         .catch((error) => res.json({ message: error }));
 });
 
+// Obtener todos las series colaboradores
+router.get("/listarPeliculasMasVistas", async (req, res) => {
+    const { tipo } = req.query;
+    peliculas
+        .find({ tipo })
+        .sort({ contador: -1 })
+        .limit(10)
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }));
+});
+
 // Obtener las ventas activas con paginacion
 router.get("/listarPaginandoActivos", async (req, res) => {
     const { pagina, limite } = req.query;
