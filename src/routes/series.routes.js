@@ -134,21 +134,25 @@ router.put("/deshabilitar/:id", async (req, res) => {
 });
 
 // Actualizar datos de la serie
+router.put("/actualizarContador/:id", async (req, res) => {
+    const { id } = req.params;
+    const { contador } = req.body;
+
+    await series
+        .updateOne({ _id: id }, { $set: { contador } })
+        .then((data) => res.status(200).json({ mensaje: "Datos de la serie actualizados" }))
+        .catch((error) => res.json({ message: error }));
+});
+
+// Actualizar datos de la serie
 router.put("/actualizar/:id", async (req, res) => {
     const { id } = req.params;
-    const { titulo, genero, actores, director, duracion, header, sinopsis, calificacion, datos, temporada, año, disponibilidad } = req.body;
+    const { titulo, genero, actores, urlPortada, urlTrailer, director, duracion, header, sinopsis, calificacion, datos, temporada, año, disponibilidad } = req.body;
 
-    // Inicia validacion para no registrar series con el mismo correo electronico
-    const busqueda = await series.findOne({ titulo });
-
-    if (busqueda && busqueda.titulo === titulo && busqueda._id != id) {
-        return res.status(401).json({ mensaje: "Serie ya registrada" });
-    } else {
-        await series
-            .updateOne({ _id: id }, { $set: { titulo, genero, actores, header, director, duracion, sinopsis, calificacion, datos, temporada, año, disponibilidad } })
-            .then((data) => res.status(200).json({ mensaje: "Datos de la serie actualizados" }))
-            .catch((error) => res.json({ message: error }));
-    }
+    await series
+        .updateOne({ _id: id }, { $set: { titulo, genero, urlPortada, urlTrailer, actores, header, director, duracion, sinopsis, calificacion, datos, temporada, año, disponibilidad } })
+        .then((data) => res.status(200).json({ mensaje: "Datos de la serie actualizados" }))
+        .catch((error) => res.json({ message: error }));
 });
 
 const destinationFolder = "/Users/josedavidayalafranco3/Documents/cancun/mi-mexico/src/assets/capitulos";
