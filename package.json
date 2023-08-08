@@ -1,7 +1,7 @@
 {
   "name": "terminal-tpv-api",
   "version": "1.0.0",
-  "description": "API del Terminal Punto de Venta LA NENA, Propiedad de ISOTECH MÉXICO",
+  "description": "API de salud chanel, Propiedad de ISOTECH MÉXICO",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
