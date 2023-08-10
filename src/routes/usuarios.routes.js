@@ -199,19 +199,12 @@ router.put("/deshabilitar/:id", async (req, res) => {
 // Actualizar datos del usuario
 router.put("/actualizar/:id", async (req, res) => {
     const { id } = req.params;
-    const { nombre, usuario, contraseña, admin, rol } = req.body;
+    const { nombre, apellido, imagen, email, contraseña, rol } = req.body;
 
-    // Inicia validacion para no registrar usuarios con el mismo correo electronico
-    const busqueda = await usuarios.findOne({ usuario });
-
-    if (busqueda && busqueda.usuario === usuario && busqueda._id != id) {
-        return res.status(401).json({ mensaje: "Usuario ya registrado" });
-    } else {
         await usuarios
-            .updateOne({ _id: id }, { $set: { nombre, usuario, contraseña, admin, rol } })
+            .updateOne({ _id: id }, { $set: { nombre, apellido, imagen, email, contraseña, rol } })
             .then((data) => res.status(200).json({ mensaje: "Datos del usuario actualizados" }))
             .catch((error) => res.json({ message: error }));
-    }
 });
 
 module.exports = router;

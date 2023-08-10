@@ -5,11 +5,13 @@ const { Schema } = mongoose;
 const usuarios = new Schema({
     nombre: { type: String },
     apellido: { type: String },
+    imagen: {type: String},
+    profesion: {type: String},
     email: { type: String },
     contraseña: { type: String },
     historial: { type: Array, default: [] },
     estado: { type: String },
-    admin: { type: String },
+    rol: { type: String },
     verificacion: { type: String },
 }, {
     timestamps: true
