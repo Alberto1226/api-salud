@@ -34,6 +34,16 @@ router.get("/listar", async (req, res) => {
         .catch((error) => res.json({ message: error }));
 });
 
+// Obtener todas los patrocionadores
+router.get("/listarPorPrioridad", async (req, res) => {
+    const { prioridadAparicion } = req.query;
+    patrocinadores
+        .find({ prioridadAparicion })
+        .sort({ _id: -1 })
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }));
+});
+
 // Obtener las ventas activas con paginacion
 router.get("/listarPaginandoActivos", async (req, res) => {
     const { pagina, limite } = req.query;
@@ -134,10 +144,10 @@ router.put("/deshabilitar/:id", async (req, res) => {
 // Actualizar datos de la patrocinador
 router.put("/actualizar/:id", async (req, res) => {
     const { id } = req.params;
-    const { nombre, urlImagen, urlWeb, urlFacebook, urlInstagram, urlTwitter, nivel, estado } = req.body;
+    const { nombre, urlImagen, urlWeb, urlFacebook, urlInstagram, urlTwitter, nivel, estado, numeroApariciones, prioridadAparicion } = req.body;
 
     await patrocinadores
-        .updateOne({ _id: id }, { $set: { nombre, urlImagen, urlWeb, urlFacebook, urlInstagram, urlTwitter, nivel, estado } })
+        .updateOne({ _id: id }, { $set: { nombre, urlImagen, urlWeb, urlFacebook, urlInstagram, urlTwitter, nivel, estado, numeroApariciones, prioridadAparicion } })
         .then((data) => res.status(200).json({ mensaje: "Datos del patrocinador actualizados" }))
         .catch((error) => res.json({ message: error }));
 });

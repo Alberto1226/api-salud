@@ -3,6 +3,7 @@ const router = express.Router();
 const series = require("../models/series");
 const multer = require("multer");
 const path = require("path");
+const { map } = require("lodash");
 
 // Registro de administradores
 router.post("/registro", async (req, res) => {
@@ -157,11 +158,42 @@ router.put("/actualizarContador/:id", async (req, res) => {
 // Actualizar datos de la serie
 router.put("/actualizar/:id", async (req, res) => {
     const { id } = req.params;
-    const { titulo, genero, actores, urlPortada, urlTrailer, director, duracion, header, sinopsis, calificacion, datos, temporada, año, disponibilidad } = req.body;
-
+    const { titulo, genero, actores, urlPortada, urlTrailer, director, duracion, header, sinopsis, calificacion, datos, temporada, año, disponibilidad, patrocinador, patrocinadorPortada, urlPortadaMovil } = req.body;
     await series
-        .updateOne({ _id: id }, { $set: { titulo, genero, urlPortada, urlTrailer, actores, header, director, duracion, sinopsis, calificacion, datos, temporada, año, disponibilidad } })
+        .updateOne({ _id: id }, { $set: { titulo, genero, urlPortada, urlTrailer, actores, header, director, duracion, sinopsis, calificacion, datos, temporada, año, disponibilidad, patrocinador, patrocinadorPortada, urlPortadaMovil } })
         .then((data) => res.status(200).json({ mensaje: "Datos de la serie actualizados" }))
+        .catch((error) => res.json({ message: error }));
+});
+
+// Obtener todos las series colaboradores
+router.get("/listarUltimo", async (req, res) => {
+    await series
+        .find()
+        .sort({ createdAt: -1})
+        .limit(3)
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }));
+});
+
+// Listar solo los productos vendidos en el día solicitado
+router.get("/listarDetallesCategoria", async (req, res) => {
+    //console.log(dia)
+    await series
+        .find()
+        .sort({ _id: -1 })
+        .then((data) => {
+            let dataTemp = []
+            //console.log(data)
+            map(data, (datos, indexPrincipal) => {
+                map(datos.categorias, (producto, index) => {
+                    const { categoria } = producto;
+                    console.log(categoria)
+                    dataTemp.push({ id: data[indexPrincipal]._id, titulo: data[indexPrincipal].titulo,  categoria: categoria, urlPortada: data[indexPrincipal].urlPortada, urlVideo: data[indexPrincipal].urlTrailer, urlPortadaMovil: data[indexPrincipal].urlPortadaMovil })
+                })
+
+            })
+            res.status(200).json(dataTemp)
+        })
         .catch((error) => res.json({ message: error }));
 });
 
